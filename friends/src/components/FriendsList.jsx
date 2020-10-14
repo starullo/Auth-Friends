@@ -24,9 +24,9 @@ const FriendsList = (props) => {
     return (
         <div>
             <h2>Your friends are...</h2>
-                {friendsList.map(friend=>{
+                {friendsList.reverse().map(friend=>{
                     return (
-                        <Friend key={Math.random() * 100000}data={friend} friendsList={friendsList} setFriendsList={setFriendsList}/>
+                        <Friend key={Math.random() * 1000000}data={friend} friendsList={friendsList} setFriendsList={setFriendsList}/>
                     )
                 })}
             <Link to='/addFriend'>ADD A FUCKING FRIEND</Link>

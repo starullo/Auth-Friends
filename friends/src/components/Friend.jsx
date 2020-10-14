@@ -18,6 +18,7 @@ const initialFormValues = {
 const Friend = (props) => {
     const [styling, setStyling] = useState(false);
     const [formValues, setFormValues] = useState(initialFormValues);
+    const [verifying, setVerifying] = useState(false);
     
     const history = useHistory();
     
@@ -42,6 +43,7 @@ const Friend = (props) => {
     }
 
     const deleteFriend = e => {
+        if (verifying) {
         console.log(props.data.id)
         axiosWithAuth()
         .delete(`/friends/${props.data.id}`)
@@ -49,6 +51,9 @@ const Friend = (props) => {
             props.setFriendsList(res.data)
             setStyling(false)
         })
+    } else {
+        return null;
+    }
     }
 
     const handleChange = e => {
@@ -63,9 +68,11 @@ const Friend = (props) => {
             <p>Name: {props.data.name}</p>
             <p>Age: {props.data.age}</p>
             <p>Email: {props.data.email}</p>
-            {!styling ? <button style={{margin: '2% auto'}}onClick={()=>setStyling(true)}>EDIT FRIEND</button> : <><button style={{margin: '2% 2%'}} onClick={handleSubmit}>SUBMIT CHANGES</button><button onClick={() => {
+            {!styling ? <>
+            <button style={{margin: '2% auto'}}onClick={()=>setStyling(true)}>EDIT FRIEND</button>
+            <button onClick={()=>{setVerifying(!verifying); deleteFriend()}} style={{margin: '2% 2%'}}>{verifying ? 'ARE YOU SURE?' : 'DELETE FRIEND'}</button> </>: <><button style={{margin: '2% 2%'}} onClick={handleSubmit}>SUBMIT CHANGES</button><button onClick={() => {
                 setStyling(false)
-            }} style={{margin: '2% 2%'}}>CANCEL</button><button onClick={deleteFriend} style={{margin: '2% 2%'}}>DELETE FRIEND</button></>}
+            }} style={{margin: '2% 2%'}}>CANCEL</button></>}
             {styling && <form>
                 <label htmlFor='name'>CHANGE NAME?
                     <input
